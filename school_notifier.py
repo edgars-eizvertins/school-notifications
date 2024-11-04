@@ -100,6 +100,8 @@ def job():
 			print("Image does not exist. No image sent.")
 
 schedule.every().day.at("20:00").do(job)
+# wait while containers starts and then start running
+time.sleep(60)
 job()
 
 while True:

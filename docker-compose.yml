@@ -1,0 +1,14 @@
+# docker-compose.yml
+version: "3.8"
+
+services:
+  school_notifier:
+    image: eeizvertins/school_notifier:v1.0.0
+    container_name: school_notifier_container
+    environment:
+      - SENDER_EMAIL=${SENDER_EMAIL}
+      - SENDER_PASSWORD=${SENDER_PASSWORD}
+      - RECEIVER_EMAILS=${RECEIVER_EMAILS}
+      - CLASS_NAME=${CLASS_NAME}
+    env_file:
+      - .env

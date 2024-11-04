@@ -7,17 +7,16 @@ from email.utils import formataddr
 import schedule
 import time
 import os
-import time
 from datetime import datetime, timedelta
-from urllib.parse import quote
 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
+
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
-RECEIVER_EMAILS = ["edgars.eizvertins@gmail.com"]
+RECEIVER_EMAILS = os.getenv("RECEIVER_EMAILS").split(",")
+CLASS_NAME = os.getenv("CLASS_NAME")
 
-CLASS_NAME = "1.a"
 BASE_IMAGE_URL = "https://72skola.lv/saraksts/{}/{}.Png"
 
 MONTHS = {
@@ -66,7 +65,7 @@ def check_image_exists(url):
 def send_email(image_url):
 	try:
 		msg = MIMEMultipart()		
-		msg['From'] = formataddr(('Your Name', SENDER_EMAIL))
+		msg['From'] = formataddr(('72 school notification', SENDER_EMAIL))
 		msg['To'] = ', '.join(RECEIVER_EMAILS)
 	
 		if (image_url is None):
@@ -101,8 +100,8 @@ def job():
 			print("Image does not exist. No image sent.")
 
 schedule.every().day.at("20:00").do(job)
+job()
 
 while True:
-	# schedule.run_pending()
-	job()    
+	schedule.run_pending()    
 	time.sleep(30)

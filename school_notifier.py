@@ -16,6 +16,7 @@ SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
 RECEIVER_EMAILS = os.getenv("RECEIVER_EMAILS").split(",")
 CLASS_NAME = os.getenv("CLASS_NAME")
+SCHEDULE_TIME = os.getenv("SCHEDULE_TIME")
 
 BASE_IMAGE_URL = "https://72skola.lv/saraksts/{}/{}.Png"
 
@@ -64,28 +65,23 @@ def check_image_exists(url):
 
 def send_email(image_url):
 	try:
-		msg = MIMEMultipart()		
-		msg['From'] = formataddr(('72 school notification', SENDER_EMAIL))
-		msg['To'] = ', '.join(RECEIVER_EMAILS)
-	
 		if (image_url is None):
-			subject = f'No changes in schedule for {CLASS_NAME}'
-			body = "No changes in schedule"
+			print(f"No changes in schedule for {CLASS_NAME}")
 		else:
-			subject = f'There are changes in schedule for {CLASS_NAME}'
+			msg = MIMEMultipart()		
+			msg['From'] = formataddr(('72 school notification', SENDER_EMAIL))
+			msg['To'] = ', '.join(RECEIVER_EMAILS)
+			msg['Subject'] = f'There are changes in schedule for {CLASS_NAME}'
 			body = 'You can see changes in schedule here: ' + image_url.replace(' ', '%20')
 			img_response = requests.get(image_url)
 			img_response.raise_for_status()
 			image = MIMEImage(img_response.content, name=os.path.basename(image_url))
 			msg.attach(image)
-
-		msg['Subject'] = subject
-		msg.attach(MIMEText(body))
-
-		with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-			server.login(SENDER_EMAIL, SENDER_PASSWORD)
-			server.send_message(msg)
-			print("Email sent successfully!")
+			msg.attach(MIMEText(body))
+			with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+				server.login(SENDER_EMAIL, SENDER_PASSWORD)
+				server.send_message(msg)
+				print("Email sent successfully!")
 	except Exception as e:
 		print(f"Error sending email: {e}")
 
@@ -99,9 +95,12 @@ def job():
 			send_email(None)
 			print("Image does not exist. No image sent.")
 
-schedule.every().day.at("20:00").do(job)
+print("Starting...")
+schedule.every().day.at(SCHEDULE_TIME).do(job)
 # wait while containers starts and then start running
+print("Initializing...")
 time.sleep(60)
+print("Working...")
 job()
 
 while True:

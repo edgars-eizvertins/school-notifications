@@ -28,3 +28,14 @@ docker buildx inspect --bootstrap
 
 Create image and push to hub:
 docker buildx build --platform linux/amd64,linux/arm64 -t eeizvertins/school_notifier:v1.0.0 . --push
+
+=========================
+Set variables in terminal
+
+chmod +x set_env_vars.sh
+source ./set_env_vars.sh
+
+==============================
+https://www.raspberrypi.com/documentation/computers/os.html#python-on-raspberry-pi
+
+source school/bin/activate

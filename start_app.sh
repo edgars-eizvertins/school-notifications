@@ -22,9 +22,9 @@ else
 fi
 
 # Step 4: Load environment variables from .env file
-if [ -f ".env" ]; then
+if [ -f "../.env" ]; then
     echo "Setting environment variables from .env file..."
-    export $(grep -v '^#' .env | xargs)
+    export $(grep -v '^#' ../.env | xargs)
     echo "Environment variables set."
 else
     echo "Error: .env file not found!"

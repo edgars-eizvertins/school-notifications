@@ -98,6 +98,11 @@ def log(message):
     print(f"[{timestamp}] {message}")
 
 log("Starting...")
+log(f"SENDER_EMAIL: {SENDER_EMAIL}")
+log(f"RECEIVER_EMAILS: {RECEIVER_EMAILS}")
+log(f"CLASS_NAME: {CLASS_NAME}")
+log(f"SCHEDULE_TIME: {SCHEDULE_TIME}")
+
 schedule.every().day.at(SCHEDULE_TIME).do(job)
 # wait while containers starts and then start running
 log("Initializing...")

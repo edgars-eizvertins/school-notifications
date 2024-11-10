@@ -1,14 +1,16 @@
 Run app locally
 
-chmod +x start_app.sh
-./start_app.sh
+1. Place .env file outside app directory
+2. chmod +x start_app.sh
+3. ./start_app.sh
 
 =========================================
 
 Configuration for development
 
 1. Install libraries:
-pip install requests schedule
+pip install requests schedule 
+(from requirements.txt)
 
 2. Generate app password here for SMTP server - https://myaccount.google.com/apppasswords
 
@@ -37,11 +39,6 @@ docker buildx inspect --bootstrap
 Create image and push to hub:
 docker buildx build --platform linux/amd64,linux/arm64 -t eeizvertins/school_notifier:v1.0.0 . --push
 
-=========================
-Set variables in terminal for running locally
-
-chmod +x set_env_vars.sh
-source ./set_env_vars.sh
 
 ==============================
 Configure Python environment

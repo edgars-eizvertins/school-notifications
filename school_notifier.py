@@ -60,47 +60,49 @@ def check_image_exists(url):
 		response = requests.head(url)
 		return response.status_code == 200
 	except Exception as e:
-		print(f"Error checking image: {e}")
+		log(f"Error checking image: {e}")
 		return False
 
 def send_email(image_url):
 	try:
-		if (image_url is None):
-			print(f"No changes in schedule for {CLASS_NAME}")
-		else:
-			msg = MIMEMultipart()		
-			msg['From'] = formataddr(('72 school notification', SENDER_EMAIL))
-			msg['To'] = ', '.join(RECEIVER_EMAILS)
-			msg['Subject'] = f'There are changes in schedule for {CLASS_NAME}'
-			body = 'You can see changes in schedule here: ' + image_url.replace(' ', '%20')
-			img_response = requests.get(image_url)
-			img_response.raise_for_status()
-			image = MIMEImage(img_response.content, name=os.path.basename(image_url))
-			msg.attach(image)
-			msg.attach(MIMEText(body))
-			with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-				server.login(SENDER_EMAIL, SENDER_PASSWORD)
-				server.send_message(msg)
-				print("Email sent successfully!")
+		log("Sending email...")		
+		msg = MIMEMultipart()
+		msg['From'] = formataddr(('72 school notification', SENDER_EMAIL))
+		msg['To'] = ', '.join(RECEIVER_EMAILS)
+		msg['Subject'] = f'There are changes in schedule for {CLASS_NAME}'
+		body = 'You can see changes in schedule here: ' + image_url.replace(' ', '%20')
+		img_response = requests.get(image_url)
+		img_response.raise_for_status()
+		image = MIMEImage(img_response.content, name=os.path.basename(image_url))
+		msg.attach(image)
+		msg.attach(MIMEText(body))
+		with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+			server.login(SENDER_EMAIL, SENDER_PASSWORD)
+			server.send_message(msg)
+			log("Email sent successfully!")
 	except Exception as e:
-		print(f"Error sending email: {e}")
+		log(f"Error sending email: {e}")
 
 def job():
 	if is_workday_tomorrow():
 		image_url = get_next_workday_image_url()
-		print(image_url);
+		log(image_url);
 		if check_image_exists(image_url):
 			send_email(image_url)
 		else:
-			send_email(None)
-			print("Image does not exist. No image sent.")
+			log(f"No changes in schedule for {CLASS_NAME}")
+			log("Image does not exist. No image sent.")
 
-print("Starting...")
+def log(message):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] {message}")
+
+log("Starting...")
 schedule.every().day.at(SCHEDULE_TIME).do(job)
 # wait while containers starts and then start running
-print("Initializing...")
+log("Initializing...")
 time.sleep(60)
-print("Working...")
+log("Working...")
 job()
 
 while True:

@@ -1,3 +1,10 @@
+Run app locally
+
+chmod +x start_app.sh
+./start_app.sh
+
+=========================================
+
 Configuration for development
 
 1. Install libraries:
@@ -10,6 +17,7 @@ SENDER_EMAIL
 SENDER_PASSWORD
 RECEIVER_EMAILS
 CLASS_NAME
+SCHEDULE_TIME
 
 ============================================
 
@@ -30,12 +38,14 @@ Create image and push to hub:
 docker buildx build --platform linux/amd64,linux/arm64 -t eeizvertins/school_notifier:v1.0.0 . --push
 
 =========================
-Set variables in terminal
+Set variables in terminal for running locally
 
 chmod +x set_env_vars.sh
 source ./set_env_vars.sh
 
 ==============================
+Configure Python environment
+
 https://www.raspberrypi.com/documentation/computers/os.html#python-on-raspberry-pi
 
 source school/bin/activate

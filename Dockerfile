@@ -11,4 +11,4 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the Python program
-CMD ["python", "./school_notifier.py"]
+CMD ["python", "-u", "./school_notifier.py"]

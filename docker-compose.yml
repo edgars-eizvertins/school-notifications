@@ -3,7 +3,7 @@ version: "3.8"
 
 services:
   school_notifier:
-    image: eeizvertins/school_notifier:v1.0.6
+    image: eeizvertins/school_notifier:v1.0.7
     container_name: school_notifier_container
     environment:
       - SENDER_EMAIL=${SENDER_EMAIL}

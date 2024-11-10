@@ -6,6 +6,11 @@ Run app locally
 
 =========================================
 
+Docker image:
+https://hub.docker.com/repository/docker/eeizvertins/school_notifier/general
+
+=======================================
+
 Configuration for development
 
 1. Install libraries:
